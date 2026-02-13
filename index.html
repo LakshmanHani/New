@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You 🤍</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background:#fdf6f9;
+    overflow:hidden;
+    text-align:center;
+    color:#2b2b2b;
+}
+
+h1{
+    font-size:7vw;
+    font-weight:600;
+    margin-bottom:40px;
+    padding:0 20px;
+}
+
+.buttons{
+    display:flex;
+    gap:20px;
+}
+
+button{
+    padding:14px 30px;
+    font-size:4.5vw;
+    border-radius:30px;
+    border:none;
+    cursor:pointer;
+    transition:all 0.3s ease;
+}
+
+#yesBtn{
+    background:#ffcad4;
+}
+
+#noBtn{
+    background:#eaeaea;
+}
+
+button:hover{
+    transform:scale(1.05);
+}
+
+/* Confetti */
+.confetti{
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:2px;
+    animation:explode 1.8s ease-out forwards;
+}
+
+@keyframes explode{
+    to{
+        transform:translate(var(--x), var(--y)) rotate(720deg);
+        opacity:0;
+    }
+}
+
+@media(min-width:768px){
+    h1{font-size:40px;}
+    button{font-size:18px;}
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="question">Will you be my Valentine? 🤍</h1>
+
+<div class="buttons">
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
+</div>
+
+<!-- YAY SOUND -->
+<audio id="yaySound" src="https://assets.mixkit.co/sfx/preview/mixkit-children-cheering-218.wav"></audio>
+
+<script>
+
+let yesSize = 4.5;
+let noSize = 4.5;
+let noClicks = 0;
+
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const question = document.getElementById("question");
+const yaySound = document.getElementById("yaySound");
+
+const funnyTexts = [
+    "Yesss 🤍",
+    "Pleeease? 🥺",
+    "Just press yes 😔",
+    "You know you want to 😌",
+    "Stop playing 😭",
+    "Yessssss 💖"
+];
+
+const sureMessages = [
+    "Are you sure? 🥲",
+    "Really sure? 😭",
+    "Last chance... 😔"
+];
+
+noBtn.addEventListener("click", function(){
+
+    if(noClicks < sureMessages.length){
+        question.innerText = sureMessages[noClicks];
+    }
+
+    if(noClicks < funnyTexts.length){
+        yesBtn.innerText = funnyTexts[noClicks];
+    }
+
+    yesSize += 0.8;
+    noSize -= 0.4;
+
+    yesBtn.style.fontSize = yesSize + "vw";
+
+    if(noSize > 2){
+        noBtn.style.fontSize = noSize + "vw";
+    }
+
+    noClicks++;
+});
+
+yesBtn.addEventListener("click", function(){
+    document.body.innerHTML = "<h1 style='font-size:8vw;'>Yayyyyyy!!!!🤍</h1>";
+    yaySound.play();
+    boomConfetti();
+});
+
+/* BOOM CONFETTI */
+function boomConfetti(){
+    const colors = ["#ffcad4","#f4acb7","#9d8189","#ffffff","#ff8fab"];
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+
+    for(let i=0;i<200;i++){
+        const conf = document.createElement("div");
+        conf.classList.add("confetti");
+
+        conf.style.left = centerX + "px";
+        conf.style.top = centerY + "px";
+        conf.style.background = colors[Math.floor(Math.random()*colors.length)];
+
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = Math.random() * 600;
+
+        const x = Math.cos(angle) * distance + "px";
+        const y = Math.sin(angle) * distance + "px";
+
+        conf.style.setProperty('--x', x);
+        conf.style.setProperty('--y', y);
+
+        document.body.appendChild(conf);
+
+        setTimeout(()=>conf.remove(),1800);
+    }
+}
+
+</script>
+
+</body>
+</html>
+
+
